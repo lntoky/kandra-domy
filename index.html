@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0d1117">
+  <title>Kandra Domy</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <div id="screen-container"></div>
+    <nav id="bottom-nav">
+      <button class="nav-btn active" data-screen="sessions">
+        <span class="nav-icon">🎮</span>
+        <span class="nav-label">Sessions</span>
+      </button>
+      <button class="nav-btn" data-screen="players">
+        <span class="nav-icon">👥</span>
+        <span class="nav-label">Joueurs</span>
+      </button>
+      <button class="nav-btn" data-screen="config">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Config</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Bottom sheet modal -->
+  <div id="modal-overlay" class="hidden"></div>
+  <div id="modal-container" class="hidden"></div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container"></div>
+
+  <!-- Scripts (order matters: db → rules → app) -->
+  <script src="js/db.js"></script>
+  <script src="js/rules.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker registration (PWA) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .catch(() => {}); // silently ignore if blocked (file://)
+      });
+    }
+  </script>
+</body>
+</html>
