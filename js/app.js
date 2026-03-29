@@ -965,6 +965,9 @@ function renderConfig() {
         Kandra Domy · Base active : <b>${active}</b><br>
         <span id="app-version">Version : chargement...</span>
       </div>
+      <button class="btn btn-secondary btn-full" id="btn-force-update" style="margin-top:8px">
+        🔄 Forcer la mise à jour
+      </button>
     </div>
   `;
 }
@@ -992,6 +995,22 @@ function bindConfig() {
     const el = document.getElementById('app-version');
     if (el) el.textContent = 'Version : dev';
   }
+
+  // ── force update ──
+  document.getElementById('btn-force-update')?.addEventListener('click', async () => {
+    // Supprime tous les caches
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+    // Désinscrit le service worker
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+    }
+    toast('Cache vidé, rechargement...', 'success');
+    setTimeout(() => location.reload(true), 1000);
+  });
 
   // ── database actions ──
   document.querySelectorAll('.db-switch').forEach(btn => {
