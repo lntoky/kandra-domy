@@ -962,13 +962,37 @@ function renderConfig() {
 
       <div class="divider"></div>
       <div style="font-size:.75rem;color:var(--muted);text-align:center;padding-bottom:8px">
-        Kandra Domy · Base active : <b>${active}</b>
+        Kandra Domy · Base active : <b>${active}</b><br>
+        <span id="app-version">Version : chargement...</span>
       </div>
     </div>
   `;
 }
 
 function bindConfig() {
+  // ── version depuis le cache SW ──
+  if ('caches' in window) {
+    caches.keys().then(keys => {
+      const swCache = keys.find(k => k.startsWith('kandra-domy-v'));
+      const el = document.getElementById('app-version');
+      if (!el) return;
+      if (swCache) {
+        const ts = parseInt(swCache.replace('kandra-domy-v', ''));
+        if (ts) {
+          const d = new Date(ts * 1000);
+          el.textContent = `Version : ${d.toLocaleDateString('fr-FR')} ${d.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'})}`;
+        } else {
+          el.textContent = `Version : ${swCache}`;
+        }
+      } else {
+        el.textContent = 'Version : dev (pas de cache)';
+      }
+    });
+  } else {
+    const el = document.getElementById('app-version');
+    if (el) el.textContent = 'Version : dev';
+  }
+
   // ── database actions ──
   document.querySelectorAll('.db-switch').forEach(btn => {
     btn.addEventListener('click', () => {
