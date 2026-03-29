@@ -89,9 +89,11 @@ function checkPostRoundWin(mode, cumulativeScores) {
   const entries = Object.entries(cumulativeScores);
 
   // singlePlayerAt60 (mode 120 only)
+  // Gagne seulement si lui a >= 60 ET tous les autres sont à 0
   if (mode === 120 && cfg.winConditions.singlePlayerAt60) {
-    const at60 = entries.filter(([, s]) => s >= 60);
-    if (at60.length === 1) {
+    const at60    = entries.filter(([, s]) => s >= 60);
+    const othersAt0 = entries.filter(([, s]) => s === 0);
+    if (at60.length === 1 && othersAt0.length === entries.length - 1) {
       return { winnerId: at60[0][0], reason: 'singleAt60' };
     }
   }
