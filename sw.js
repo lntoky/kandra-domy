@@ -1,7 +1,7 @@
 // Service Worker — Kandra Domy
 // Mise en cache de tous les fichiers pour fonctionnement hors ligne
 
-const CACHE_NAME = 'kandra-domy-v1';
+const CACHE_NAME = 'kandra-domy-v' + 'temp_1774783721';
 const FILES = [
   './index.html',
   './manifest.json',
